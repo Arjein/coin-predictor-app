@@ -12,7 +12,8 @@ const TradingViewLightweightChart = ({ historicalData = [] }) => {
   const candleSeriesRef = useRef();
   const volumeSeriesRef = useRef();
   const predictionLineSeriesRef = useRef();
-
+  //const railwayendpoint = 'http://localhost:5001';
+  const railwayendpoint = 'https://web-production-f33e7.up.railway.app'
   function timeToLocal(originalTime) {
     const d = new Date(originalTime * 1000);
     return Date.UTC(
@@ -28,7 +29,7 @@ const TradingViewLightweightChart = ({ historicalData = [] }) => {
 
   // Fetch historical candles and volume from the API on mount.
   useEffect(() => {
-    fetch('http://localhost:5001/candles')
+    fetch(`${railwayendpoint}/candles`)
       .then((response) => response.json())
       .then((data) => {
         console.log('Historical data:', data);
@@ -53,7 +54,7 @@ const TradingViewLightweightChart = ({ historicalData = [] }) => {
   }, []);
 
   useEffect(() => {
-    fetch('http://localhost:5001/forecasts')
+    fetch(`${railwayendpoint}/forecasts`)
       .then((response) => response.json())
       .then((data) => {
         console.log('Forecast data:', data);
@@ -182,7 +183,10 @@ const TradingViewLightweightChart = ({ historicalData = [] }) => {
 
   // Socket.IO real-time updates (candle updates).
   useEffect(() => {
-    const socket = io('http://localhost:5001/');
+    fetch(`${railwayendpoint}/forecasts`)
+    const socket = io(railwayendpoint, {
+      transports: ['polling', 'websocket'],
+    });
     
     socket.on('kline_update', (data) => {
       console.log('Received Kline:', JSON.stringify(data, null, 2));
