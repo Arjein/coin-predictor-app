@@ -185,11 +185,13 @@ const TradingViewLightweightChart = ({ historicalData = [] }) => {
   useEffect(() => {
     fetch(`${railwayendpoint}/forecasts`)
     const socket = io(railwayendpoint, {
-      transports: ['polling', 'websocket'],
+      transports: ['polling','websocket'],
     });
-    
+    socket.on("connect", () => console.log("✅ Socket connected:", socket.id));
+    socket.on("disconnect", () => console.log("❌ Socket disconnected"));
+
     socket.on('kline_update', (data) => {
-      console.log('Received Kline:', JSON.stringify(data, null, 2));
+      console.log('📈 Kline update:', JSON.stringify(data, null, 2));
 
       const newCandle = {
         time: timeToLocal(Math.floor(data.open_time / 1000)),
