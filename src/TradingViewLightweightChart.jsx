@@ -185,7 +185,8 @@ const TradingViewLightweightChart = ({ historicalData = [] }) => {
   useEffect(() => {
     fetch(`${railwayendpoint}/forecasts`)
     const socket = io(railwayendpoint, {
-      transports: ['polling','websocket'],
+      transports: ['websocket'],
+      secure: true
     });
     socket.on("connect", () => console.log("✅ Socket connected:", socket.id));
     socket.on("disconnect", () => console.log("❌ Socket disconnected"));
