@@ -13,7 +13,7 @@ const TradingViewLightweightChart = ({ historicalData = [] }) => {
   const volumeSeriesRef = useRef();
   const predictionLineSeriesRef = useRef();
   //const railwayendpoint = 'http://localhost:5001';
-  const railwayendpoint = 'https://web-production-f33e7.up.railway.app'
+  const railwayendpoint = 'https://coin-predictor-api-production.up.railway.app'
   function timeToLocal(originalTime) {
     const d = new Date(originalTime * 1000);
     return Date.UTC(
