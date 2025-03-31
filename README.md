@@ -1,70 +1,110 @@
-# Getting Started with Create React App
+# Coin Predictor App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A real-time cryptocurrency price prediction application that displays live BNB/USDT price data with AI-powered price forecasts.
 
-## Available Scripts
+![Coin Predictor Screenshot](screenshot.png)
 
-In the project directory, you can run:
+## Live Demo
 
-### `npm start`
+Check out the live application: [https://coin-predictor-app.vercel.app/](https://coin-predictor-app.vercel.app/)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Features
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- 📊 Real-time candlestick chart for BNB/USDT
+- 📈 Live price updates via WebSocket connection
+- 🤖 AI-generated price predictions
+- 📱 Responsive design that works on both desktop and mobile
+- 📊 Volume indicators with color coding
+- 📍 Dynamic price lines for current predictions
 
-### `npm test`
+## Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Frontend:** React.js
+- **Charting Library:** Lightweight Charts by TradingView
+- **Real-time Data:** Socket.IO
+- **API:** Custom backend deployed on Railway
+- **AI Model:** Hugging Face Spaces
 
-### `npm run build`
+## System Architecture
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The system consists of three main components:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **Frontend Application** (current repository)
+   - Deployed on Vercel
+   - Provides interactive UI for viewing price data and predictions
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. **Backend API** ([coin-predictor-api](https://github.com/Arjein/coin-predictor-api))
+   - Deployed on Railway
+   - Handles data storage, WebSocket connections, and communication with AI model
+   - Fetches market data from cryptocurrency exchanges
 
-### `npm run eject`
+3. **AI Prediction Model**
+   - Hosted on [Hugging Face Spaces](https://huggingface.co/spaces/Arjein/coin-predictor)
+   - Built with TinyTimeMixer architecture (based on IBM Granite TimeSeries TTM R2)
+   - Uses 512 time steps of historical data to predict 48 future price points
+   - Incorporates technical indicators (EMA, RSI, ATR), market sentiment (Fear & Greed Index), and temporal features
+   - Fine-tuned specifically for BNB/USDT 5-minute price movements 
+   - Exposes a FastAPI endpoint for real-time prediction requests
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Data flows through the system as follows:
+- The backend collects market data and sends it to the frontend
+- The backend periodically sends historical data to the AI model for predictions
+- Predictions are stored in the backend database and served to the frontend
+- Real-time price updates are pushed to the frontend via WebSockets
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Deployment
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+The application is deployed on Vercel:
+- **Production URL:** [https://coin-predictor-app.vercel.app/](https://coin-predictor-app.vercel.app/)
+- **Deployment Platform:** Vercel
+- **CI/CD:** Automatic deployments from the main branch
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Setup
 
-## Learn More
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/coin-predictor-app.git
+   cd coin-predictor-app
+   ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. Start the development server:
+   ```bash
+   npm start
+   ```
 
-### Code Splitting
+4. Open [http://localhost:3000](http://localhost:3000) to view the app in your browser.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Architecture
 
-### Analyzing the Bundle Size
+The application uses several custom React hooks:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- `useFetchCandles`: Fetches historical candlestick data
+- `useFetchForecasts`: Retrieves AI-generated price predictions
+- `useSocket`: Establishes WebSocket connection for real-time updates
+- `useChart`: Manages the TradingView Lightweight Chart
 
-### Making a Progressive Web App
+## API Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The application connects to the following API endpoints:
 
-### Advanced Configuration
+- `GET /candles`: Retrieves historical candlestick data
+- `GET /forecasts`: Fetches AI-generated price predictions
+- WebSocket: Listens for `kline_update` events for real-time price data
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+All API requests are sent to the backend service at: `https://coin-predictor-api-production.up.railway.app`
 
-### Deployment
+## Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+The backend API endpoint is configured in `TradingViewLightweightChart.jsx`:
+```javascript
+const railwayEndpoint = 'https://coin-predictor-api-production.up.railway.app';
+```
 
-### `npm run build` fails to minify
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+MIT
